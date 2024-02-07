@@ -19,17 +19,27 @@ export class MessagesComponent implements OnInit {
   faEnvelope = faEnvelope
   faPaperPlane = faPaperPlane
   faTrashCan = faTrashCan
+  loading = false
+
 
   constructor(private messageService: MessageService) { }
   ngOnInit(): void {
     this.loadMessage()
   }
+  
   loadMessage() {
+    this.loading = true
     this.messageService.getMessages(this.pageNumber, this.pageSize, this.label).subscribe({
       next: response => {
         this.messages = response.result
         this.pagination = response.pagination
+        this.loading = false
       }
+    })
+  }
+  deleteMessage(id: number) {
+    this.messageService.deleteMessage(id).subscribe({
+      next: _ => this.messages?.splice(this.messages.findIndex(ms => ms.id === id), 1)
     })
   }
   pageChanged(event: any) {

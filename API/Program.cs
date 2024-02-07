@@ -1,6 +1,8 @@
 using API.Data;
+using API.Entities;
 using API.Extensions;
 using API.Middleware;
+using Microsoft.AspNetCore.Identity;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +14,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddAppServices(builder.Configuration);
 
-builder.Services.AddJWTService(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -29,9 +31,10 @@ using var scope = app.Services.CreateScope();
 var service = scope.ServiceProvider;
 try
 {
-    var dataContext = service.GetRequiredService<DataContext>();
+   var dataContext = service.GetRequiredService<DataContext>();
+    var userManager = service.GetRequiredService<UserManager<AppUser>>(); //
     await dataContext.Database.MigrateAsync();
-    await Seed.SeedUsers(dataContext);
+    await Seed.SeedUsers(userManager); //<--
 }
 catch (System.Exception e)
 {

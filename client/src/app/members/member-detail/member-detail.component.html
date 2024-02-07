@@ -1,4 +1,4 @@
-<div class="row" *ngIf="member">
+<div class="row" >
     <div class="col-3">
         <div class="card">
             <img class="card-img-top img-thumbnail" 
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="col-8">
-        <tabset class="member-tabset"#memberTabs>
+        <tabset class="member-tabset" >
             <tab heading="About">
                 <h5>Description</h5>
                 <p>{{member.introduction}}</p>

@@ -108,3 +108,9 @@ D:\Phuthaneth\EIEI-main\API\obj\Debug\net7.0\refint\API.dll
 D:\Phuthaneth\EIEI-main\API\obj\Debug\net7.0\API.pdb
 D:\Phuthaneth\EIEI-main\API\obj\Debug\net7.0\API.genruntimeconfig.cache
 D:\Phuthaneth\EIEI-main\API\obj\Debug\net7.0\ref\API.dll
+D:\Phuthaneth\EIEI-main\API\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\Phuthaneth\EIEI-main\API\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\Phuthaneth\EIEI-main\API\bin\Debug\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\Phuthaneth\EIEI-main\API\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
+D:\Phuthaneth\EIEI-main\API\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
+D:\Phuthaneth\EIEI-main\API\bin\Debug\net7.0\Microsoft.Extensions.Options.dll

@@ -21,16 +21,25 @@ import { MessageService } from 'src/app/_services/message.service';
   
 })
 export class MemberDetailComponent implements OnInit {
-  member: Member | undefined
+  member: Member = {} as Member;
   photos: GalleryItem[] = []
-  @ViewChild('memberTabs') memberTabs?: TabsetComponent
-  activeTab?: TabDirective
+  @ViewChild('memberTabs' , { static: true }) memberTabs?: TabsetComponent
+  activeTab?: TabDirective  
   messages: Message[] = []
 
   constructor(private messageService: MessageService,private memberService: MembersService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-      this.loadMember()
+      this.route.data.subscribe({
+          next: data => {
+              this.member = data['member']  
+              this.getImages()
+          }
+      })
+      this.route.queryParams.subscribe({
+          next: params => params['tab'] && this.selectTab(params['tab'])
+      })
+  
   }
   getImages() {
     if (!this.member) return

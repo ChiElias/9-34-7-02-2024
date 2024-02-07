@@ -1,13 +1,13 @@
 ﻿namespace API.Entities;
+using Microsoft.AspNetCore.Identity;
 
 #nullable disable
-public class AppUser
-{
-    public int Id { get; set; }
-
-    public string UserName { get; set; }
-    public  byte[] PasswordHash { get; set; }
-    public  byte[] PasswordSalt { get; set; }
+public class AppUser : IdentityUser<int> {
+    public ICollection<AppUserRole> UserRoles { get; set; }
+    // public int Id { get; set; }
+    // public string UserName { get; set; }
+    // public  byte[] PasswordHash { get; set; }
+    // public  byte[] PasswordSalt { get; set; }
     public DateOnly BirthDate { get; set; }
     public string Aka { get; set; }
     public string Gender { get; set; }

@@ -1,8 +1,8 @@
 <div class="card">
     <div class="card-body">
       <h5 *ngIf="messages.length <= 0">No messages</h5>
-      <ul class="direct-message" *ngIf="messages.length > 0">
-        <li *ngFor="let message of messages">
+      <ul class="direct-message"style="height: 400px; overflow-y: auto;" *ngIf="messages.length > 0">
+        <li *ngFor="let message of messages" style="width:95%;">
           <div class="row">
             <div [class]="message.senderUsername === username 
                         ? 'col-1' 
@@ -23,7 +23,9 @@
                         (read {{message.dateRead+'Z' | timeago}})</span>
                   </small>
                 </div>
-                <p>{{message.content}}</p>
+                <p ngxLongPress2 (onLongPress)="onLongPressMessage(message.id)" style="cursor: pointer;">
+                  {{message.content}}
+              </p>
               </div>
             </div>
   
@@ -56,16 +58,16 @@
     </div>
   
     <div class="card-footer">
-        <form>
-            <div class="input-group">
-                <input type="text" class="form-control input-sm" placeholder="Send direct message">
-                <div class="input-group-append">
-                    <button class="btn btn-primary ms-2" type="submit"> 
-                      <fa-icon [icon]="faPaperPlane"></fa-icon> Send
-                    </button>
-                </div>
+      <form #messageForm="ngForm" (ngSubmit)="sendMessage()" autocomplete="off">
+        <div class="input-group">
+          <input name="messageContent" required [(ngModel)]="messageContent" type="text"
+              class="form-control input-sm" placeholder="Send direct message">
+          <div class="input-group-append">
+            <button [disabled]="!messageForm.valid" class="btn btn-primary ms-2" type="submit">
+               <fa-icon [icon]="faPaperPlane"></fa-icon> Send</button>
+          </div>
             </div>
         </form>
-    </div>
+    </div>  
   
   </div>
