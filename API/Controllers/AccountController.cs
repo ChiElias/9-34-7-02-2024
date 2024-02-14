@@ -5,6 +5,8 @@ using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,12 +17,16 @@ public class AccountController : BaseApiController
     private readonly IMapper _mapper;
     private readonly DataContext _dataContext;
     private readonly ITokenService _tokenService;
+    private readonly UserManager<AppUser> _userManager;
 
-    public AccountController(IMapper mapper,DataContext dataContext, ITokenService tokenService)
+    public AccountController(IMapper mapper,DataContext dataContext, ITokenService tokenService,UserManager<AppUser> userManager)
     {
         _mapper = mapper;
         _dataContext = dataContext; 
         _tokenService = tokenService;
+        _userManager = userManager;
+   
+
     }
 
     [HttpPost("login")]
@@ -44,7 +50,7 @@ public class AccountController : BaseApiController
         return new UserDto
         {
             Username = user.UserName,
-            Token = _tokenService.CreateToken(user),
+            Token = await _tokenService.CreateToken(user),
             // PhotoUrl = user.Photos.FirstOrDefault(photo => photo.IsMain)?.Url,
             // Aka = user.Aka,
             // Gender = user.Gender
@@ -54,20 +60,20 @@ public class AccountController : BaseApiController
     [HttpPost("register")] //ApiController automatically binds the object
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
-        if (await isUserExists(registerDto.Username!)) return BadRequest("username is already exists");
+        if (await isUserExists(registerDto.Username!)) 
+        return BadRequest("username is already exists");
         var user = _mapper.Map<AppUser>(registerDto);
-        // using var hmacSHA256 = new HMACSHA256();    
-        
         user.UserName = registerDto.Username!.Trim().ToLower();
-        // user.PasswordHash = hmacSHA256.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password!.Trim()));
-        // user.PasswordSalt = hmacSHA256.Key;
 
-        _dataContext.Users.Add(user);
-        // await _dataContext.SaveChangesAsync();
+        var AppUser = await _userManager.CreateAsync(user,registerDto.Password);
+        if(!AppUser.Succeeded) return BadRequest(AppUser.Errors);
+        // _dataContext.Users.Add(user);
+        var role = await _userManager.AddToRoleAsync(user, "Member");//
+        if (!role.Succeeded) return BadRequest(role.Errors);
         return new UserDto
         {
             Username = user.UserName,
-            Token = _tokenService.CreateToken(user),
+            Token = await _tokenService.CreateToken(user),
             // Aka = user.Aka,
             // Gender = user.Gender
         };

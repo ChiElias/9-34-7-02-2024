@@ -1,8 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { Member } from 'src/app/_models/member';
-import { faUser ,faEnvelope,faHeart} from '@fortawesome/free-regular-svg-icons'
+import { faUser ,faEnvelope,faHeart,} from '@fortawesome/free-regular-svg-icons'
 import { MembersService } from 'src/app/_services/members.service';
 import { ToastrService } from 'ngx-toastr';
+import { PresenceService } from 'src/app/_services/presence.service';
+
 @Component({
   selector: 'app-member-card',
   templateUrl: './member-card.component.html',
@@ -11,9 +13,10 @@ import { ToastrService } from 'ngx-toastr';
 export class MemberCardComponent {
   faUser = faUser
   faEnvelope = faEnvelope
+  faUserSolid = faUser
   faHeart = faHeart
   @Input() member: Member | undefined
-  constructor(private memberService: MembersService,private toastr: ToastrService) { }
+  constructor(public presenceService:PresenceService,private memberService: MembersService,private toastr: ToastrService) { }
 
   addLike(member: Member) {
     this.memberService.addLike(member.userName).subscribe({

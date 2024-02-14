@@ -34,6 +34,7 @@ public class UsersController : BaseApiController
     return await _userRepository.GetUserByUserNameAsync(username);
   }
 
+  [Authorize(Roles = "Administrator")]
   [HttpGet]
   public async Task<ActionResult<PageList<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
   {
@@ -62,6 +63,7 @@ public class UsersController : BaseApiController
     return await _userRepository.GetUserByIdAsync(id);
   }
 
+  [Authorize(Roles = "Administrator,Moderator,Member")]
   [HttpGet("username/{username}")]
   public async Task<ActionResult<AppUser>> GetUserByUserName(string username)
   {
